@@ -14,6 +14,7 @@
             overflow: hidden;
             flex-direction: column;
             font-family: Arial, sans-serif;
+            position: relative;
         }
         .gift-box {
             width: 150px;
@@ -48,11 +49,23 @@
             text-align: center;
         }
         .meme {
-            max-width: 400px;
-            margin-top: 20px;
+            max-width: 500px;
+            display: block;
+            margin: 20px auto;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
+        @keyframes floatingHearts {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+        .heart {
+            position: absolute;
+            color: red;
+            font-size: 24px;
+            animation: floatingHearts 5s linear infinite;
+        }
+        meta[property="og:image"] { display: none; }
     </style>
 </head>
 <body>
@@ -60,10 +73,9 @@
         <span class="click-text">Click on me</span>
     </div>
     <div class="content" id="content">
-        <h2 style="color: white; text-shadow: 2px 2px #fff;">Friday the 13th? No, it's Friday the 14th, should be enough to scare ya because you and I are still single 😂 </h2>
-		<h2 style="color: white; text-shadow: 2px 2px #fff;">Happy Valentines Day ♡ </h2>
-
-        <img class="meme" src="images/luigivalentine.jpg" alt="Cute Meme">
+        <h2 style="color: white; text-shadow: 2px 2px #fff;">Friday the 13th? No, it's Friday the 14th, should be enough to scare ya because you and I are still single 😂</h2>
+        <h2 style="color: white; text-shadow: 2px 2px #fff;">Happy Valentines Day ♡</h2>
+        <img class="meme" src="images/luigivalentine.jpg" alt="Cute Meme" style="display: none;">
         <audio id="music" loop>
             <source src="audio/George Michael - Careless Whisper (Lyric Video) 4.mp3" type="audio/mpeg">
         </audio>
@@ -72,8 +84,22 @@
         function openGift() {
             document.querySelector('.gift-box').style.display = 'none';
             document.getElementById('content').style.display = 'block';
+            document.querySelector('.meme').style.display = 'block';
             document.getElementById('music').play();
+            generateHearts();
+        }
+        function generateHearts() {
+            for (let i = 0; i < 30; i++) {
+                let heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 5000);
+            }
         }
     </script>
 </body>
 </html>
+

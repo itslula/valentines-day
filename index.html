@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valentine's Surprise</title>
+    <title>Click for a cute surprise</title>
     <style>
         body {
             background-color: #ff1493;
@@ -15,47 +15,91 @@
             flex-direction: column;
             font-family: Arial, sans-serif;
             position: relative;
+            text-align: center;
+        }
+        .gift-container {
+            position: relative;
+            width: 150px;
+            height: 180px;
+            cursor: pointer;
         }
         .gift-box {
             width: 150px;
             height: 150px;
-            background: red;
-            position: relative;
+            border: 5px solid white;
+            background: transparent;
             display: flex;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
+            position: relative;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
             transition: transform 0.3s;
-            flex-direction: column;
         }
         .gift-box:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
+        /* Top red ribbon */
         .gift-box::before {
-            content: "🎁";
-            font-size: 50px;
+            content: "";
+            position: front;
+            width: 100%;
+            height: 20px;
+            background: red;
+            top: -10px;
+            border-radius: 5px;
         }
+        /* Vertical red ribbon */
+        .ribbon {
+            position: absolute;
+            width: 20px;
+            height: 100%;
+            background: white;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        /* Horizontal red ribbon */
+        .ribbon-horizontal {
+            position: absolute;
+            width: 100%;
+            height: 20px;
+            background: white;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        /* "Click on me" text positioned above the box */
         .click-text {
             font-size: 16px;
-            color: white;
+            color: White;
+			position: center;
             font-weight: bold;
             position: absolute;
-            top: -30px;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
         }
         .content {
             display: none;
             text-align: center;
         }
+        /* Twirl & Glow Effect on Meme */
         .meme {
-            max-width: 80%;
+            width: 90%;
+            max-width: 600px;
             height: auto;
             display: block;
             margin: 20px auto;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: scale(0.5) rotate(0deg);
+            transition: transform 1s ease-in-out, opacity 0.5s;
         }
+        .meme.show {
+            opacity: 1;
+            transform: scale(1) rotate(360deg);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.9);
+        }
+        /* Floating Hearts Animation */
         @keyframes floatingHearts {
             0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
             100% { transform: translateY(-10vh) scale(1); opacity: 0; }
@@ -66,25 +110,38 @@
             font-size: 24px;
             animation: floatingHearts 5s linear infinite;
         }
-        meta[property="og:image"] { display: none; }
+        /* Adjustments for small screens */
+        @media (max-width: 600px) {
+            .meme {
+                width: 90%;
+                max-width: 90%;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="gift-box" onclick="openGift()">
-        <span class="click-text">Click on me</span>
+    <div class="gift-container" onclick="openGift()">
+        <div class="click-text">Click</div>
+        <div class="gift-box">
+            <div class="ribbon"></div>
+            <div class="ribbon-horizontal"></div>
+        </div>
     </div>
     <div class="content" id="content">
-        <h2 style="color: white; text-shadow: 2px 2px #fff;">Happy Valentines Day ♡</h2>
-        <img class="meme" src="images/luigivalentine.jpg" alt="Cute Meme" style="display: none;">
+        <img class="meme" id="meme" src="images/luigivalentine.jpg" alt="Cute Meme">
         <audio id="music" loop>
             <source src="audio/George Michael - Careless Whisper (Lyric Video) 4.mp3" type="audio/mpeg">
         </audio>
     </div>
     <script>
         function openGift() {
-            document.querySelector('.gift-box').style.display = 'none';
+            document.querySelector('.gift-container').style.display = 'none';
             document.getElementById('content').style.display = 'block';
-            document.querySelector('.meme').style.display = 'block';
+
+            // Twirl and Glow Effect on Meme
+            const meme = document.getElementById('meme');
+            meme.classList.add('show');
+
             document.getElementById('music').play();
             generateHearts();
         }
